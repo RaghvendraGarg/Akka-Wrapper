@@ -1,2 +1,2 @@
 # Akka-Wrapper
-Chaining of akka actors similar to chaining of Steps to form a job in spring batch.
+Project aims at creating a wrapper on top of Akka which abstracts out the actor creation, Also provides a much simpler way to configure akka actors in chained fashion to perform a number of pipelined tasks. Similar to a spring batch where you could just configure a Steps to form a Job, but with Akka Wrapper user gets the benefit of parrallelising each step unlike spring batch's complex way of running parallel steps.
