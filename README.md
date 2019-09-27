@@ -1,20 +1,20 @@
 Project aims at creating a wrapper on top of Akka which abstracts out the actor creation, Also provides a much simpler way to configure akka actors in chained fashion to perform a number of pipelined tasks. Similar to a spring batch where you could just configure a Steps to form a Job, but with Akka Wrapper user gets the benefit of parrallelising each step unlike spring batch's complex way of running parallel steps.
 Actors can be chained together forming a Job which can be executed using JobIntiatorActor. Also this Api works best when a single message is flowing through the chain. But for some use cases if a bunch of messages has to processed for e.g. for a service call you want to combine multiple request into one, for that Accumulator can be used and later once the job is done again the whole bunch can be converted into individual messages using a Splitter.
 
-####Important Components:
+**Important Components:**
 
-####Actor:  
+**Actor:**  
 An actor is a container for State, Behavior, a Mailbox, Child Actors and a Supervisor Strategy. All of this is encapsulated behind an Actor Reference.(Read more here)
 
-####Service: 
+**Service:** 
 Each Actor will be injected with implementation of this interface which will have the actual logic that the underlying actor will invoke.
 
-####ImportMessage: 
+**ImportMessage:** 
 Any message that has to be processed within a Job that has to extend ImportMessage.
 
 Actors can be created using ActorFactory bean
 
-##### Creating ActorRef
+**Creating ActorRef**
 
  1. By calling create(String actorName, Service service, String processingStep, int noOfInstances) where actorName should be the name of the Actor you want to create, service should be the bean instance of implementation of Service interface, processingStep is the name of the step, and noOfInstances is the no of Actor instance you want. This method returns an Instance of ActorRef, this method by default uses SmallestMailBox router and Akka default dispatcher while creating Actor. if you want to create Actor with different dispatcher and router then use method no.2.
 
@@ -41,10 +41,10 @@ Actors can be created using ActorFactory bean
          }
 ```
  
-#####Note: Class containing these @Bean annotations should be marked @Configuration in order to load these beans.
+**Note: Class containing these @Bean annotations should be marked @Configuration in order to load these beans.**
 
  
-####Job: 
+**Job:** 
 Once set of actors are created we want to chain them together, so chain of actors is called a Job.
 ```java
     @Bean
