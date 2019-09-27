@@ -1,4 +1,5 @@
 This modules has few utility classes which help in faster development.
+
 **1. Cache:** 
     This is simple in memory cache which can be stored to cache any configuration data which needs to be refreshed in some time.
     modules also takes care of keeping caches in sync in case of clustered environments with multiple hosts running the app. Rabbitmq or any other amqp can be used for this.
