@@ -1,4 +1,4 @@
-Project aims at creating a wrapper on top of Akka which abstracts out the actor creation, Also provides a much simpler way to configure akka actors in chained fashion to perform a number of pipelined tasks. Similar to a spring batch where you could just configure a Steps to form a Job, but with Akka Wrapper user gets the benefit of parrallelising each step unlike spring batch's complex way of running parallel steps.
+Project aims at creating a wrapper on top of Akka which abstracts out the actor creation, Also provides a much simpler way to configure akka actors in chained fashion to perform a number of pipelined tasks. Similar to a spring batch where you could just configure steps to form a Job, but with Akka Wrapper user gets the benefit of parrallelising each step unlike spring batch's complex way of running parallel steps.
 Actors can be chained together forming a Job which can be executed using JobIntiatorActor. Also this Api works best when a single message is flowing through the chain. But for some use cases if a bunch of messages has to processed for e.g. for a service call you want to combine multiple request into one, for that Accumulator can be used and later once the job is done again the whole bunch can be converted into individual messages using a Splitter.
 
 **Important Components:**
@@ -110,15 +110,15 @@ Creating Job With Branches
      
      
         Job build = JobBuilderFactory.get("build").start(additionRef).
-                next(subtractionRef).terminateIf(primeNumber).
-                next(multiplicationRef).  // will terminate if the number after executing multiplication is a even number else next step will be executed
-                fork(evenNumber, addJob). // if the number after executing the above step is a prime number then Add job will be called.
+                next(subtractionRef).terminateIf(primeNumber). // will be terminated if the number after executing subtraction is a prime number else next step will be executed
+                next(multiplicationRef).  
+                fork(evenNumber, addJob). // if the number after executing the above step is an even number then Add job will be called.
                 // and will terminate after executing the last actor in Add job
                         fork(isIsDivisibleByFive, subtractionJob). // if the number after executing the above step is divisible by 5 then Subtraction job will be called.
                 // and will terminate after executing the last actor in Subtraction job
                         next(divisionRef). // if either of the above two conditions does not match then this call will be executed
                 fork(isIsDivisibleBySeven, divisionJob).// if the above fork conditions were not met only then the call will reach here,
-                // and if the number is a prime number then division job will be initiated
+                // and if the number is divisible by 7 then division job will be initiated
                         build(); // end
      
         return build;
